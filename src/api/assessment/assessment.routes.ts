@@ -1,8 +1,8 @@
 import { Router } from 'express';
 import { authMiddleware } from '../../core/middleware/authMiddleware';
-import { handleChat } from './chatbot.controller';
+import { handleCreateAssessment } from './assessment.controller';
 
 const router = Router();
-router.post('/chat', authMiddleware, handleChat);
+router.post('/', authMiddleware, handleCreateAssessment);
 
 export default router;

@@ -17,4 +17,66 @@ model User {
   password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  assessment  Assessment?
+  chatSessions ChatSession[]
+}
+
+model Assessment {
+  id                String     @id @default(cuid())
+  createdAt         DateTime   @default(now())
+  updatedAt         DateTime   @updatedAt
+  userId            String     @unique // Setiap user hanya punya satu assessment
+  user              User       @relation(fields: [userId], references: [id])
+  date_of_birth     DateTime
+  height            Float      // cm
+  weight            Float      // kg
+  gender            String
+  job_type          String
+  expense_plan      Float
+  important_habits  Habit[]
+  obstacles         Obstacle[]
+  long_term_goals   String
+  schedule          Json       // Menyimpan array of objects sebagai JSON
+  workout_reminder  Int        // menit
+  weekly_activity   Activity[]
+  workout_goal      String
+  target            Json       // Menyimpan object sebagai JSON
+}
+
+model Habit {
+  id           String @id @default(cuid())
+  name         String
+  assessmentId String
+  assessment   Assessment @relation(fields: [assessmentId], references: [id])
+}
+
+model Obstacle {
+  id           String @id @default(cuid())
+  name         String
+  assessmentId String
+  assessment   Assessment @relation(fields: [assessmentId], references: [id])
+}
+
+model Activity {
+  id           String @id @default(cuid())
+  name         String
+  assessmentId String
+  assessment   Assessment @relation(fields: [assessmentId], references: [id])
+}
+
+model ChatSession {
+  id        String   @id
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  messages  ChatMessage[]
+}
+
+model ChatMessage {
+  id          String   @id @default(cuid())
+  role        String
+  text        String
+  createdAt   DateTime @default(now())
+  sessionId   String
+  session     ChatSession @relation(fields: [sessionId], references: [id])
 }
